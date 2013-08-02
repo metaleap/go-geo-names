@@ -125,15 +125,15 @@ func onPlace(_ int, r *geonames_parse.PlaceRec) {
 		r.NameAscii = ""
 	}
 	r.NamesAlt = uslice.StrWithout(uslice.StrEach(r.NamesAlt, titleIf), true, r.Name, r.NameAscii)
-	// ifn := func(sl ...string) {
-	// 	for _, s := range sl {
-	// 		if ustr.HasAnyCase(s, "NAME ") || ustr.HasAnyCase(s, "NAME_") || ustr.HasAnyCase(s, "KNOWN") {
-	// 			println(s)
-	// 		}
-	// 	}
-	// }
-	// ifn(r.Name, r.NameAscii)
-	// ifn(r.NamesAlt...)
+	ifn := func(sl ...string) {
+		for _, s := range sl {
+			if ustr.HasAnyCase(s, "NAME ") || ustr.HasAnyCase(s, " NAME") || ustr.HasAnyCase(s, "NAME_") || ustr.HasAnyCase(s, "_NAME") || ustr.HasAnyCase(s, "KNOWN") {
+				println(s)
+			}
+		}
+	}
+	ifn(r.Name, r.NameAscii)
+	ifn(r.NamesAlt...)
 	m := bson.M{
 		"_id": r.Id, CollPlacesField_Country: mCountries[r.Country.Code], CollPlacesField_Elevation: r.Elevation,
 		CollPlacesField_LonLat: r.LonLat, CollPlacesField_Name: r.Name,

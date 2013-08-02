@@ -14,16 +14,16 @@ var (
 
 	//	Maps relative file URLs to local destination file names.
 	GeoFiles = map[string]string{
-		"admin1CodesASCII.txt":  "dump/admin1CodesASCII.txt",
-		"admin2Codes.txt":       "dump/admin2Codes.txt",
-		"allCountries.txt":      "dump/allCountries.zip",
-		"alternateNames.txt":    "dump/alternateNames.zip",
-		"countryInfo.txt":       "dump/countryInfo.txt",
-		"featureCodes_en.txt":   "dump/featureCodes_en.txt",
-		"hierarchy.txt":         "dump/hierarchy.zip",
-		"iso-languagecodes.txt": "dump/iso-languagecodes.txt",
-		"timeZones.txt":         "dump/timeZones.txt",
-		"zip_allCountries.txt":  "zip/allCountries.zip",
+		"admin1CodesASCII.txt": "dump/admin1CodesASCII.txt",
+		"admin2Codes.txt":      "dump/admin2Codes.txt",
+		"allCountries.txt":     "dump/allCountries.zip",
+
+		"countryInfo.txt":     "dump/countryInfo.txt",
+		"featureCodes_en.txt": "dump/featureCodes_en.txt",
+		"hierarchy.txt":       "dump/hierarchy.zip",
+
+		"timeZones.txt":        "dump/timeZones.txt",
+		"zip_allCountries.txt": "zip/allCountries.zip",
 	}
 )
 ```
