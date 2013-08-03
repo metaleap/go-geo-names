@@ -125,7 +125,7 @@ func onPlace(_ int, r *geonames_parse.PlaceRec) {
 	}
 	r.NamesAlt = uslice.StrWithout(r.NamesAlt, true, r.Name, r.NameAscii)
 
-	if len(r.Name) == 0 {
+	if len(r.Name) == 0 || len(r.LonLat) != 2 {
 		return
 	}
 
@@ -157,6 +157,9 @@ var (
 )
 
 func onPostal(i int, r *geonames_parse.PostalRec) {
+	if len(r.LonLat) != 2 {
+		return
+	}
 	m := umgo.Sparse(bson.M{
 		"_id": i + 1, CollPostalsField_PlaceName: title(r.PlaceName), CollPostalsField_PostalCode: r.PostalCode,
 		CollPostalsField_Country: mCountries[r.CountryCode], CollPostalsField_Accuracy: r.Accuracy,
