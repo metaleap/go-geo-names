@@ -77,6 +77,21 @@ func insert(geo *geonames_parse.Iterator, db *mgo.Database, collName string, nex
 	return err
 }
 
+func placeName(n string) string {
+	if len(n) > 4 && ustr.IsUpperAscii(n) {
+		n = title(n)
+	}
+	if p1 := strings.Index(n, "["); p1 > 0 {
+		if p2 := strings.LastIndex(n, "]"); p2 > p1 && ustr.Has(n[p1:p2], " ") {
+			n = ustr.ReduceSpaces(ustr.Concat(n[:p1], n[p2+1:]))
+		}
+	}
+	if ustr.HasAny(strings.ToLower(n), "name not found", "name to be determined", "name not shown", "name_unknown", "name unknown", "name not known") {
+		n = ""
+	}
+	return n
+}
+
 func prepCountries() {
 	var (
 		m    bson.M

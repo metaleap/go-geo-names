@@ -113,27 +113,22 @@ var (
 	CollPlacesField_Admin12    = "d"
 )
 
-func titleIf(n string) string {
-	if len(n) > 4 && ustr.IsUpperAscii(n) {
-		n = title(n)
-	}
-	return n
-}
-
 func onPlace(_ int, r *geonames_parse.PlaceRec) {
-	if r.Name, r.NameAscii = titleIf(r.Name), titleIf(r.NameAscii); r.Name == r.NameAscii {
+	if r.Name, r.NameAscii = placeName(r.Name), placeName(r.NameAscii); len(r.Name) == 0 {
+		r.Name = r.NameAscii
+	}
+	if r.Name == r.NameAscii {
 		r.NameAscii = ""
 	}
-	r.NamesAlt = uslice.StrWithout(uslice.StrEach(r.NamesAlt, titleIf), true, r.Name, r.NameAscii)
-	ifn := func(sl ...string) {
-		for _, s := range sl {
-			if ustr.HasAnyCase(s, "NAME ") || ustr.HasAnyCase(s, " NAME") || ustr.HasAnyCase(s, "NAME_") || ustr.HasAnyCase(s, "_NAME") || ustr.HasAnyCase(s, "KNOWN") {
-				println(s)
-			}
-		}
+	if r.NamesAlt = uslice.StrEach(r.NamesAlt, placeName); len(r.Name) == 0 {
+		r.Name = ustr.FirstNonEmpty(r.NamesAlt...)
 	}
-	ifn(r.Name, r.NameAscii)
-	ifn(r.NamesAlt...)
+	r.NamesAlt = uslice.StrWithout(r.NamesAlt, true, r.Name, r.NameAscii)
+
+	if len(r.Name) == 0 {
+		return
+	}
+
 	m := bson.M{
 		"_id": r.Id, CollPlacesField_Country: mCountries[r.Country.Code], CollPlacesField_Elevation: r.Elevation,
 		CollPlacesField_LonLat: r.LonLat, CollPlacesField_Name: r.Name,

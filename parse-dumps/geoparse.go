@@ -19,13 +19,6 @@ func checkLonLat(lonLat []float64) []float64 {
 	return nil
 }
 
-func replaceDoubleSpaces(s string) string {
-	for strings.Index(s, "  ") >= 0 {
-		s = strings.Replace(s, "  ", " ", -1)
-	}
-	return s
-}
-
 //	Provides file parsing and record iteration
 type Iterator struct {
 	//	Directory containing raw `download.geonames.org/export/dump` files
@@ -59,7 +52,7 @@ func (me *Iterator) iterate(fileName string, skipFirst bool, i int, onRec func(i
 		if err == nil {
 			err = ufs.ReadLines(file, skipFirst, func(ln string) {
 				if !strings.HasPrefix(ln, "#") {
-					onRec(i, uslice.StrEach(ustr.Split(ln, "\t"), strings.TrimSpace, replaceDoubleSpaces))
+					onRec(i, uslice.StrEach(ustr.Split(ln, "\t"), strings.TrimSpace, ustr.ReduceSpaces))
 					i++
 				}
 			})
@@ -211,13 +204,13 @@ func (me *Iterator) Places(onRec func(index int, rec *PlaceRec)) (err error) {
 		}
 		r.TimezoneName = rec[len(rec)-2]
 
-		r.NamesAlt = uslice.StrWithout(r.NamesAlt, true, r.Name, r.NameAscii)
 		if r.Name == r.NameAscii {
 			r.NameAscii = ""
 		}
 		if len(r.Name) == 0 {
 			r.Name, r.NameAscii = r.NameAscii, ""
 		}
+		r.NamesAlt = uslice.StrWithout(r.NamesAlt, true, r.Name, r.NameAscii)
 
 		onRec(index, &r)
 	})
