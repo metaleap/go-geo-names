@@ -13,7 +13,7 @@ import (
 )
 
 func checkLonLat(lonLat []float64) []float64 {
-	if len(lonLat) == 2 && lonLat[0] >= ugeo.LonMin && lonLat[0] < ugeo.LonMax && lonLat[1] >= ugeo.LatMin && lonLat[1] < ugeo.LatMax {
+	if len(lonLat) > 1 && lonLat[0] >= ugeo.LonMin && lonLat[0] <= ugeo.LonMax && lonLat[1] >= ugeo.LatMin && lonLat[1] <= ugeo.LatMax {
 		return lonLat
 	}
 	return nil
@@ -188,7 +188,7 @@ func (me *Iterator) Places(onRec func(index int, rec *PlaceRec)) (err error) {
 		r.Name = rec[1]
 		r.NameAscii = rec[2]
 		r.NamesAlt = uslice.StrEach(ustr.Split(rec[3], ","), strings.TrimSpace)
-		r.LonLat = checkLonLat(ustr.ParseFloats(rec[4], rec[5]))
+		r.LonLat = checkLonLat(ustr.ParseFloats(rec[5], rec[4]))
 		r.Feature.Class = rec[6]
 		r.Feature.Code = rec[7]
 		r.Country.Code = rec[8]
@@ -198,11 +198,11 @@ func (me *Iterator) Places(onRec func(index int, rec *PlaceRec)) (err error) {
 		r.Admin.Code3 = rec[12]
 		r.Admin.Code4 = rec[13]
 		r.Population = ustr.ParseInt(rec[14])
-		r.Elevation = ustr.ParseInt(rec[len(rec)-4])
-		if el2 := ustr.ParseInt(rec[len(rec)-3]); el2 != 0 && r.Elevation == 0 {
+		r.Elevation = ustr.ParseInt(rec[15])
+		if el2 := ustr.ParseInt(rec[16]); el2 != 0 && r.Elevation == 0 {
 			r.Elevation = el2
 		}
-		r.TimezoneName = rec[len(rec)-2]
+		r.TimezoneName = rec[17]
 
 		if r.Name == r.NameAscii {
 			r.NameAscii = ""
@@ -232,8 +232,8 @@ func (me *Iterator) PostalCodes(onRec func(index int, rec *PostalRec)) (err erro
 		r.Admin.Code2 = rec[6]
 		r.Admin.Name3 = rec[7]
 		r.Admin.Code3 = rec[8]
-		r.LonLat = checkLonLat(ustr.ParseFloats(rec[len(rec)-3], rec[len(rec)-2]))
-		r.Accuracy = ustr.ParseInt(rec[len(rec)-1])
+		r.LonLat = checkLonLat(ustr.ParseFloats(rec[10], rec[9]))
+		r.Accuracy = ustr.ParseInt(rec[11])
 		onRec(index, &r)
 	})
 	return
