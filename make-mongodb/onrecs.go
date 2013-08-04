@@ -157,7 +157,7 @@ var (
 )
 
 func onPostal(i int, r *geonames_parse.PostalRec) {
-	if len(r.LonLat) != 2 {
+	if len(r.LonLat) != 2 || ustr.HasAnyCase(r.PostalCode, "CEDEX") {
 		return
 	}
 	m := umgo.Sparse(bson.M{
