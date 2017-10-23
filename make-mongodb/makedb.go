@@ -7,7 +7,7 @@ import (
 	"github.com/go-forks/mgo"
 	"github.com/go-forks/mgo/bson"
 	"github.com/go-geo/geonames/parse-dumps"
-	"github.com/go-utils/ustr"
+	"github.com/metaleap/go-util/str"
 )
 
 var (

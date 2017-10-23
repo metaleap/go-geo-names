@@ -6,10 +6,10 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/go-geo/ugeo"
-	"github.com/go-utils/ufs"
-	"github.com/go-utils/uslice"
-	"github.com/go-utils/ustr"
+	"github.com/metaleap/go-util/fs"
+	"github.com/metaleap/go-util/geo"
+	"github.com/metaleap/go-util/slice"
+	"github.com/metaleap/go-util/str"
 )
 
 func checkLonLat(lonLat []float64) []float64 {

@@ -8,8 +8,8 @@ import (
 	"strings"
 	"sync"
 
-	"github.com/go-utils/ufs"
-	"github.com/go-utils/unet"
+	"github.com/metaleap/go-util/fs"
+	"github.com/metaleap/go-util/net"
 )
 
 var (
